@@ -65,11 +65,6 @@ class Page2Activity : AppCompatActivity() {
                 .start()
         }
 
-        testAddButton.setOnClickListener {
-            currentProducts.add(Product("测试商品", "这是测试添加的商品", "¥0", "秒杀"))
-            adapter.submitList(currentProducts.toList())
-            productsStatus.text = "已添加测试商品"
-        }
         loadProducts(adapter, productsStatus)
     }
 
