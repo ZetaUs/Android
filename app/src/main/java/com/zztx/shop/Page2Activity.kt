@@ -38,9 +38,19 @@ class Page2Activity : AppCompatActivity() {
         productsList.adapter = adapter
         root.alpha = 0f
         root.translationY = 24f
+        val defaultPaddingLeft = root.paddingLeft
+        val defaultPaddingTop = root.paddingTop
+        val defaultPaddingRight = root.paddingRight
+        val defaultPaddingBottom = root.paddingBottom
+
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val systemBar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBar.left, systemBar.top, systemBar.right, systemBar.bottom)
+            v.setPadding(
+                defaultPaddingLeft + systemBar.left,
+                defaultPaddingTop + systemBar.top,
+                defaultPaddingRight + systemBar.right,
+                defaultPaddingBottom + systemBar.bottom
+            )
             insets
         }
 
