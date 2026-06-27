@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="14dp"
                     android:text="品质好物、限时优惠、今天就买到心动价"
                     android:textColor="#D8E2F1"
                     android:textSize="14sp"
@@ -50,27 +50,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="14dp"
                     android:background="@drawable/bg_button_dark"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="20dp"
                     android:paddingVertical="10dp"
                     android:text="立即逛逛"
                     android:textColor="#FFFFFF"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="#24FFFFFF"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="6dp"
-                    android:text="今日爆款 48 小时"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
