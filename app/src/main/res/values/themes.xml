@@ -6,4 +6,5 @@
     </style>
 
     <style name="Theme.众志通讯" parent="Base.Theme.众志通讯" />
+    <style name="Theme.MyApplication" parent="Theme.众志通讯" />
 </resources>
