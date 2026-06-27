@@ -5,5 +5,6 @@ data class Product(
     val subtitle: String,
     val price: String,
     val tag: String,
-    val accent: String = "#FEF3C7"
+    val accent: String = "#FEF3C7",
+    val imageUrl: String? = null
 )

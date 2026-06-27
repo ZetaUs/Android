@@ -3,10 +3,12 @@ package com.zztx.shop
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 
 class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DiffCallback) {
 
@@ -20,6 +22,7 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Di
     }
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val productImage: ImageView = itemView.findViewById(R.id.ivProductImage)
         private val titleView: TextView = itemView.findViewById(R.id.tvProductTitle)
         private val subtitleView: TextView = itemView.findViewById(R.id.tvProductSubtitle)
         private val priceView: TextView = itemView.findViewById(R.id.tvProductPrice)
@@ -31,6 +34,11 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Di
             priceView.text = product.price
             tagView.text = product.tag
             tagView.setBackgroundResource(if (product.tag == "秒杀") R.drawable.bg_badge_blue else R.drawable.bg_badge_yellow)
+            productImage.load(product.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_launcher_foreground)
+                error(R.drawable.ic_launcher_foreground)
+            }
         }
     }
 
