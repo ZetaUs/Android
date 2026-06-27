@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Bundle
 import android.os.Looper
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -22,6 +23,7 @@ class Page2Activity : AppCompatActivity() {
 
     private val networkExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
+    private val currentProducts = mutableListOf<Product>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,7 @@ class Page2Activity : AppCompatActivity() {
 
         val root = findViewById<LinearLayout>(R.id.main2)
         val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
+        val testAddButton = findViewById<Button>(R.id.btnTestAddProduct)
         val productsList = findViewById<RecyclerView>(R.id.rvProducts)
         val adapter = ProductAdapter()
 
@@ -63,6 +66,11 @@ class Page2Activity : AppCompatActivity() {
                 .start()
         }
 
+        testAddButton.setOnClickListener {
+            currentProducts.add(Product("测试商品", "这是测试添加的商品", "¥0", "秒杀"))
+            adapter.submitList(currentProducts.toList())
+            productsStatus.text = "已添加测试商品"
+        }
         loadProducts(adapter, productsStatus)
     }
 
@@ -74,6 +82,8 @@ class Page2Activity : AppCompatActivity() {
                 val products = fetchProductsFromCloudflareKv()
                 mainHandler.post {
                     adapter.submitList(products)
+                    currentProducts.clear()
+                    currentProducts.addAll(products)
                     statusView.text = "已加载 ${products.size} 件云端商品"
                 }
             } catch (_: Exception) {
