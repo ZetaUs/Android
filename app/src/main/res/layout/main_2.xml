@@ -136,7 +136,9 @@
                     android:layout_height="88dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="#FFF7E6"
+                    android:background="@drawable/bg_rounded_card"
+                    android:backgroundTint="#FFF7E6"
+                    android:backgroundTintMode="src_in"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -164,7 +166,9 @@
                     android:layout_height="88dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:background="#E0F2FE"
+                    android:background="@drawable/bg_rounded_card"
+                    android:backgroundTint="#E0F2FE"
+                    android:backgroundTintMode="src_in"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -200,7 +204,9 @@
                     android:layout_height="88dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="#ECFDF5"
+                    android:background="@drawable/bg_rounded_card"
+                    android:backgroundTint="#ECFDF5"
+                    android:backgroundTintMode="src_in"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -228,7 +234,9 @@
                     android:layout_height="88dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:background="#FCE7F3"
+                    android:background="@drawable/bg_rounded_card"
+                    android:backgroundTint="#FCE7F3"
+                    android:backgroundTintMode="src_in"
                     android:orientation="vertical"
                     android:padding="14dp">
 

@@ -10,7 +10,8 @@
     <FrameLayout
         android:layout_width="76dp"
         android:layout_height="76dp"
-        android:background="#F8FAFC">
+        android:background="@drawable/bg_rounded_rect"
+        android:backgroundTint="#F8FAFC">
 
         <ImageView
             android:layout_width="match_parent"
