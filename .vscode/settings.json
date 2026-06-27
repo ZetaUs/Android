@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd /d e:\\\\ZTX\\\\Android\\\\shop\\\\app\\\\src\\\\main\\\\res\\\\values ; python -c \"from pathlib import Path; p=Path\\('strings\\.xml'\\); print\\(repr\\(p\\.read_text\\(\\)\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
