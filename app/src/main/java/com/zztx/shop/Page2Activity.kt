@@ -116,20 +116,43 @@ class Page2Activity : AppCompatActivity() {
             trimmed.startsWith("[") -> JSONArray(trimmed)
             else -> JSONObject(trimmed).optJSONArray("products") ?: JSONArray()
         }
-
+        // 支持两种返回格式：
+        // 1) JSON 数组：[{"title":"..","subtitle":"..",...}, ...]
+        // 2) JSON 对象的 products 数组：{"products":[...]} （上面已经处理）
+        // 3) KV 的 key->value 映射：{"<imageUrl>": "<productName>", ...}
         val products = mutableListOf<Product>()
-        for (index in 0 until array.length()) {
-            val item = array.optJSONObject(index) ?: continue
-            products.add(
-                Product(
-                    title = item.optString("title", "未命名商品"),
-                    subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
-                    price = item.optString("price", "¥0"),
-                    tag = item.optString("tag", "推荐"),
-                    accent = item.optString("accent", "#FEF3C7")
+
+        // 如果 array 有内容，按数组解析每项对象
+        if (array.length() > 0) {
+            for (index in 0 until array.length()) {
+                val item = array.optJSONObject(index) ?: continue
+                products.add(
+                    Product(
+                        title = item.optString("title", "未命名商品"),
+                        subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
+                        price = item.optString("price", "¥0"),
+                        tag = item.optString("tag", "推荐"),
+                        accent = item.optString("accent", "#FEF3C7")
+                    )
                 )
-            )
+            }
+            return products
         }
+
+        // 如果不是数组，尝试把根对象当成 key->value 映射解析（Cloudflare KV 常见格式）
+        try {
+            val obj = JSONObject(trimmed)
+            val keys = obj.keys()
+            while (keys.hasNext()) {
+                val key = keys.next()
+                val value = obj.optString(key)
+                // 把 value 当作商品名 (title)，把 key（通常为图片 URL）放到 subtitle 暂存
+                products.add(Product(title = value.ifEmpty { "未命名商品" }, subtitle = key, price = "--", tag = "推荐", accent = "#FEF3C7"))
+            }
+        } catch (_: Exception) {
+            // 忽略解析错误，返回空列表
+        }
+
         return products
     }
 }
