@@ -146,8 +146,17 @@ class Page2Activity : AppCompatActivity() {
             while (keys.hasNext()) {
                 val key = keys.next()
                 val value = obj.optString(key)
-                // 把 value 当作商品名 (title)，把 key（通常为图片 URL）放到 subtitle 暂存
-                products.add(Product(title = value.ifEmpty { "未命名商品" }, subtitle = key, price = "--", tag = "推荐", accent = "#FEF3C7"))
+                // 把 value 当作商品名 (title)，把 key 作为 imageUrl
+                products.add(
+                    Product(
+                        title = value.ifEmpty { "未命名商品" },
+                        subtitle = "云端商品",
+                        price = "--",
+                        tag = "推荐",
+                        accent = "#FEF3C7",
+                        imageUrl = key
+                    )
+                )
             }
         } catch (_: Exception) {
             // 忽略解析错误，返回空列表

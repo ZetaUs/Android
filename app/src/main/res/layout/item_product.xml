@@ -14,10 +14,12 @@
         android:backgroundTint="#F8FAFC">
 
         <ImageView
+            android:id="@+id/ivProductImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
             android:padding="12dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/logo"
             tools:ignore="ImageContrastCheck,UnusedAttribute" />
     </FrameLayout>
