@@ -1,0 +1,121 @@
+package com.zztx.shop
+
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Bundle
+import android.os.Looper
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONArray
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.concurrent.Executors
+
+class Page2Activity : AppCompatActivity() {
+
+    private val networkExecutor = Executors.newSingleThreadExecutor()
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    @SuppressLint("MissingInflatedId")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.main_2)
+
+        val root = findViewById<LinearLayout>(R.id.main2)
+        val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
+        val productsList = findViewById<RecyclerView>(R.id.rvProducts)
+        val adapter = ProductAdapter()
+
+        productsList.layoutManager = GridLayoutManager(this, 2)
+        productsList.adapter = adapter
+        root.alpha = 0f
+        root.translationY = 24f
+        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+            val systemBar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBar.left, systemBar.top, systemBar.right, systemBar.bottom)
+            insets
+        }
+
+        root.post {
+            root.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(420)
+                .setInterpolator(android.view.animation.DecelerateInterpolator())
+                .start()
+        }
+
+        loadProducts(adapter, productsStatus)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadProducts(adapter: ProductAdapter, statusView: TextView) {
+        statusView.text = getString(R.string.loading_products)
+        networkExecutor.execute {
+            try {
+                val products = fetchProductsFromCloudflareKv()
+                mainHandler.post {
+                    adapter.submitList(products)
+                    statusView.text = "已加载 ${products.size} 件云端商品"
+                }
+            } catch (_: Exception) {
+                mainHandler.post {
+                    statusView.text = getString(R.string.load_products_failed)
+                    adapter.submitList(
+                        listOf(
+                            Product("云端商品", "请检查 KV 接口是否可访问", "--", "错误"),
+                            Product("接口配置", "将 URL 替换为你的 Worker 地址", "--", "提示")
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun fetchProductsFromCloudflareKv(): List<Product> {
+        val endpoint = getString(R.string.cloudflare_kv_products_url)
+        val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
+            requestMethod = "GET"
+            connectTimeout = 8000
+            readTimeout = 8000
+        }
+
+        return try {
+            val responseText = connection.inputStream.bufferedReader().use { it.readText() }
+            parseProducts(responseText)
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun parseProducts(jsonText: String): List<Product> {
+        val trimmed = jsonText.trim()
+        val array = when {
+            trimmed.startsWith("[") -> JSONArray(trimmed)
+            else -> JSONObject(trimmed).optJSONArray("products") ?: JSONArray()
+        }
+
+        val products = mutableListOf<Product>()
+        for (index in 0 until array.length()) {
+            val item = array.optJSONObject(index) ?: continue
+            products.add(
+                Product(
+                    title = item.optString("title", "未命名商品"),
+                    subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
+                    price = item.optString("price", "¥0"),
+                    tag = item.optString("tag", "推荐"),
+                    accent = item.optString("accent", "#FEF3C7")
+                )
+            )
+        }
+        return products
+    }
+}
