@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Bundle
 import android.os.Looper
-import android.widget.Button
+
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -33,7 +33,6 @@ class Page2Activity : AppCompatActivity() {
 
         val root = findViewById<LinearLayout>(R.id.main2)
         val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
-        val testAddButton = findViewById<Button>(R.id.btnTestAddProduct)
         val productsList = findViewById<RecyclerView>(R.id.rvProducts)
         val adapter = ProductAdapter()
 
