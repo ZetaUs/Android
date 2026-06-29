@@ -25,8 +25,9 @@ class Page2Activity : AppCompatActivity() {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val currentProducts = mutableListOf<Product>()
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.main_2)
