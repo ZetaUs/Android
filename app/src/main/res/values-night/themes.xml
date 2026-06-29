@@ -3,7 +3,7 @@
     <style name="Base.Theme.众志通讯" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/black</item>
         <item name="android:colorBackground">@color/black</item>
-        <item name="android:colorSurface">@color/black</item>
+        <item name="colorSurface">@color/black</item>
         <item name="android:colorForeground">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>

@@ -4,7 +4,7 @@
         <!-- Light theme colors -->
         <item name="android:windowBackground">@color/white</item>
         <item name="android:colorBackground">@color/white</item>
-        <item name="android:colorSurface">@color/white</item>
+        <item name="colorSurface">@color/white</item>
         <item name="android:colorForeground">@color/black</item>
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorSecondary">@color/black</item>
