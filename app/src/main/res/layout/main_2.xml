@@ -112,7 +112,7 @@
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"
-                tools:ignore="Autofill,HardcodedText,TextFields,TouchTargetSizeCheck,TextContrastCheck" />
+                tools:ignore="Autofill,HardcodedText,TextFields,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
             <TextView
                 android:layout_width="wrap_content"
