@@ -2,9 +2,11 @@ package com.zztx.shop
 
 import android.annotation.SuppressLint
 import android.os.Handler
-import android.os.Bundle
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -22,7 +24,8 @@ class Page2Activity : AppCompatActivity() {
     private val TAG = "SHOP_API_DEBUG"
     private val networkExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val currentProducts = mutableListOf<Product>()
+    private val currentProducts = mutableListOf()
+    private lateinit var adapter: ProductAdapter
 
     @SuppressLint("MissingInflatedId", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,8 @@ class Page2Activity : AppCompatActivity() {
         val root = findViewById<LinearLayout>(R.id.main2)
         val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
         val productsList = findViewById<RecyclerView>(R.id.rvProducts)
-        val adapter = ProductAdapter()
+        val etSearch = findViewById<EditText>(R.id.etSearch)
+        adapter = ProductAdapter()
 
         productsList.layoutManager = GridLayoutManager(this, 2)
         productsList.adapter = adapter
@@ -66,11 +70,32 @@ class Page2Activity : AppCompatActivity() {
                 .start()
         }
 
-        loadProducts(adapter, productsStatus)
+        // 搜索框文字实时过滤商品
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val keyword = s.toString().trim()
+                val filterList = if (keyword.isEmpty()) {
+                    currentProducts
+                } else {
+                    currentProducts.filter {
+                        it.title.contains(keyword, ignoreCase = true) ||
+                                it.subtitle.contains(keyword, ignoreCase = true) ||
+                                it.tag.contains(keyword, ignoreCase = true)
+                    }
+                }
+                adapter.submitList(filterList)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        loadProducts(productsStatus)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadProducts(adapter: ProductAdapter, statusView: TextView) {
+    private fun loadProducts(statusView: TextView) {
         statusView.text = getString(R.string.loading_products)
         networkExecutor.execute {
             try {
@@ -120,9 +145,9 @@ class Page2Activity : AppCompatActivity() {
         }
     }
 
-    // 适配你KV接口字段：img/desc/category，解决图片空白问题
+    // 适配KV img/desc/category 字段，自动读取商品图片链接
     private fun parseProducts(jsonText: String): List<Product> {
-        val products = mutableListOf<Product>()
+        val products = mutableListOf()
         val jsonArr = JSONArray(jsonText.trim())
 
         for (i in 0 until jsonArr.length()) {
@@ -134,7 +159,6 @@ class Page2Activity : AppCompatActivity() {
                     price = "¥" + item.optString("price", "0"),
                     tag = item.optString("category", "推荐"),
                     accent = item.optString("accent", "#FEF3C7"),
-                    // 优先读取imageUrl，无则读取接口img字段（核心修复图片空白）
                     imageUrl = item.optString("imageUrl", item.optString("img", ""))
                 )
             )
