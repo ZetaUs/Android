@@ -1,5 +1,6 @@
 package com.zztx.shop
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -37,6 +38,7 @@ class Page3Activity : AppCompatActivity() {
         loadProducts(productsStatus)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadProducts(statusView: TextView) {
         statusView.text = "云端商品正在加载..."
         networkExecutor.execute {
