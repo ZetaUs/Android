@@ -143,6 +143,7 @@
                 tools:ignore="HardcodedText,InefficientWeight" />
 
             <TextView
+                android:id="@+id/tvMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="查看更多"
