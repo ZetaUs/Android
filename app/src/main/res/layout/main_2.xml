@@ -155,7 +155,6 @@
             android:textSize="13sp"
             tools:ignore="HardcodedText,TextContrastCheck" />
 
-        <!-- 测试添加商品按钮已移除 -->
             tools:ignore="HardcodedText" />
 
         <androidx.recyclerview.widget.RecyclerView
