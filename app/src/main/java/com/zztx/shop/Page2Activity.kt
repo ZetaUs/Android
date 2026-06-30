@@ -120,7 +120,7 @@ class Page2Activity : AppCompatActivity() {
         }
     }
 
-    // 仅适配Worker标准数组 [{}]，移除多余KV兼容，减少报错点
+    // 适配你KV接口字段：img/desc/category，解决图片空白问题
     private fun parseProducts(jsonText: String): List<Product> {
         val products = mutableListOf<Product>()
         val jsonArr = JSONArray(jsonText.trim())
@@ -130,11 +130,12 @@ class Page2Activity : AppCompatActivity() {
             products.add(
                 Product(
                     title = item.optString("title", "未命名商品"),
-                    subtitle = item.optString("subtitle", "云端精选商品"),
-                    price = item.optString("price", "¥0"),
-                    tag = item.optString("tag", "推荐"),
+                    subtitle = item.optString("desc", "云端精选商品"),
+                    price = "¥" + item.optString("price", "0"),
+                    tag = item.optString("category", "推荐"),
                     accent = item.optString("accent", "#FEF3C7"),
-                    imageUrl = item.optString("imageUrl", "")
+                    // 优先读取imageUrl，无则读取接口img字段（核心修复图片空白）
+                    imageUrl = item.optString("imageUrl", item.optString("img", ""))
                 )
             )
         }
