@@ -11,8 +11,18 @@
         android:orientation="vertical"
         android:padding="20dp"
         android:paddingTop="40dp"
-        tools:context=".Page2Activity"
+        tools:context=".Page3Activity"
         tools:ignore="ExtraText,MissingConstraints">
+
+        <!-- 新增商品加载状态文字，和Page2统一id tvProductsStatus -->
+        <TextView
+            android:id="@+id/tvProductsStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="云端商品正在加载..."
+            android:textColor="#6B7280"
+            android:textSize="13sp"
+            tools:ignore="HardcodedText" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProducts"
