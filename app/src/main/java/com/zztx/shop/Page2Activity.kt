@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
-import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
@@ -27,6 +26,7 @@ class Page2Activity : AppCompatActivity() {
 
     @SuppressLint("MissingInflatedId", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 强制竖屏
         requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -75,7 +75,7 @@ class Page2Activity : AppCompatActivity() {
         networkExecutor.execute {
             try {
                 val products = fetchProductsFromCloudflareKv()
-                Log.d(TAG, "成功获取商品数量：${products.size}")
+                Log.d(TAG, "商品加载成功，数量：${products.size}")
                 mainHandler.post {
                     adapter.submitList(products)
                     currentProducts.clear()
@@ -83,13 +83,13 @@ class Page2Activity : AppCompatActivity() {
                     statusView.text = "已加载 ${products.size} 件云端商品"
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "接口请求/解析失败", e)
+                Log.e(TAG, "请求/解析异常", e)
                 mainHandler.post {
                     statusView.text = getString(R.string.load_products_failed)
                     adapter.submitList(
                         listOf(
-                            Product("云端商品", "请检查 KV 接口是否可访问", "--", "错误"),
-                            Product("接口配置", "将 URL 替换为你的 Worker 地址", "--", "提示")
+                            Product("云端商品", "接口加载失败", "--", "错误"),
+                            Product("检查项", "确认Worker正常部署", "--", "提示")
                         )
                     )
                 }
@@ -99,91 +99,44 @@ class Page2Activity : AppCompatActivity() {
 
     private fun fetchProductsFromCloudflareKv(): List<Product> {
         val endpoint = getString(R.string.cloudflare_kv_products_url)
-        Log.d(TAG, "请求接口地址：$endpoint")
+        Log.d(TAG, "请求地址：$endpoint")
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 8000
             readTimeout = 8000
-            // 增加UA头，防止Cloudflare拦截
-            setRequestProperty("User-Agent", "Mozilla/5.0 Android App Client")
+            setRequestProperty("User-Agent", "Mozilla/5.0 Android Client")
         }
 
         return try {
             val code = connection.responseCode
             Log.d(TAG, "接口响应码：$code")
-            if (code != 200) {
-                throw Exception("接口返回错误码 $code")
-            }
+            if (code != 200) throw Exception("响应码异常 $code")
+
             val responseText = connection.inputStream.bufferedReader().use { it.readText() }
-            Log.d(TAG, "原始返回JSON：$responseText")
+            Log.d(TAG, "返回JSON：$responseText")
             parseProducts(responseText)
         } finally {
             connection.disconnect()
         }
     }
 
+    // 仅适配Worker标准数组 [{}]，移除多余KV兼容，减少报错点
     private fun parseProducts(jsonText: String): List<Product> {
-        val trimmed = jsonText.trim()
         val products = mutableListOf<Product>()
-        // 分支1：Worker标准数组 [{}]
-        if (trimmed.startsWith("[")) {
-            val array = JSONArray(trimmed)
-            if (array.length() > 0) {
-                for (index in 0 until array.length()) {
-                    val item = array.optJSONObject(index) ?: continue
-                    products.add(
-                        Product(
-                            title = item.optString("title", "未命名商品"),
-                            subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
-                            price = item.optString("price", "¥0"),
-                            tag = item.optString("tag", "推荐"),
-                            accent = item.optString("accent", "#FEF3C7"),
-                            imageUrl = item.optString("imageUrl", "")
-                        )
-                    )
-                }
-            }
-            return products
-        }
-        // 分支2：对象 {products:[]} 或 KV键值格式
-        try {
-            val obj = JSONObject(trimmed)
-            // 先读取标准products数组
-            val arr = obj.optJSONArray("products")
-            if (arr != null && arr.length() > 0) {
-                for (index in 0 until arr.length()) {
-                    val item = arr.optJSONObject(index) ?: continue
-                    products.add(
-                        Product(
-                            title = item.optString("title", "未命名商品"),
-                            subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
-                            price = item.optString("price", "¥0"),
-                            tag = item.optString("tag", "推荐"),
-                            accent = item.optString("accent", "#FEF3C7"),
-                            imageUrl = item.optString("imageUrl", "")
-                        )
-                    )
-                }
-                return products
-            }
-            // 兼容老KV key=图片url value=商品名
-            val keys = obj.keys()
-            while (keys.hasNext()) {
-                val key = keys.next()
-                val value = obj.optString(key)
-                products.add(
-                    Product(
-                        title = value.ifEmpty { "未命名商品" },
-                        subtitle = "云端商品",
-                        price = "--",
-                        tag = "推荐",
-                        accent = "#FEF3C7",
-                        imageUrl = key
-                    )
+        val jsonArr = JSONArray(jsonText.trim())
+
+        for (i in 0 until jsonArr.length()) {
+            val item = jsonArr.optJSONObject(i) ?: continue
+            products.add(
+                Product(
+                    title = item.optString("title", "未命名商品"),
+                    subtitle = item.optString("subtitle", "云端精选商品"),
+                    price = item.optString("price", "¥0"),
+                    tag = item.optString("tag", "推荐"),
+                    accent = item.optString("accent", "#FEF3C7"),
+                    imageUrl = item.optString("imageUrl", "")
                 )
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "JSON解析分支异常", e)
+            )
         }
         return products
     }
