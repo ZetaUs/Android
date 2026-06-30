@@ -1,6 +1,7 @@
 package com.zztx.shop
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,6 +27,7 @@ class Page2Activity : AppCompatActivity() {
     private val networkExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val currentProducts = mutableListOf<Product>()
+    // 修复1：lateinit显式标注类型 ProductAdapter
     private lateinit var adapter: ProductAdapter
 
     @SuppressLint("MissingInflatedId", "SourceLockedOrientationActivity")
@@ -39,6 +41,7 @@ class Page2Activity : AppCompatActivity() {
         val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
         val productsList = findViewById<RecyclerView>(R.id.rvProducts)
         val etSearch = findViewById<EditText>(R.id.etSearch)
+        val tvMore = findViewById<TextView>(R.id.tvMore)
         adapter = ProductAdapter()
 
         productsList.layoutManager = GridLayoutManager(this, 2)
@@ -70,9 +73,9 @@ class Page2Activity : AppCompatActivity() {
                 .start()
         }
 
+        // 搜索过滤
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val keyword = s.toString().trim()
                 val filterList: List<Product> = if (keyword.isEmpty()) {
@@ -86,9 +89,14 @@ class Page2Activity : AppCompatActivity() {
                 }
                 adapter.submitList(filterList)
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
+
+        // 查看更多跳转（修复：先创建Page3Activity再使用）
+        tvMore.setOnClickListener {
+            val jumpIntent = Intent(this, Page3Activity::class.java)
+            startActivity(jumpIntent)
+        }
 
         loadProducts(productsStatus)
     }
@@ -130,12 +138,10 @@ class Page2Activity : AppCompatActivity() {
             readTimeout = 8000
             setRequestProperty("User-Agent", "Mozilla/5.0 Android Client")
         }
-
         return try {
             val code = connection.responseCode
             Log.d(TAG, "接口响应码：$code")
             if (code != 200) throw Exception("响应码异常 $code")
-
             val responseText = connection.inputStream.bufferedReader().use { it.readText() }
             Log.d(TAG, "返回JSON：$responseText")
             parseProducts(responseText)
@@ -147,7 +153,6 @@ class Page2Activity : AppCompatActivity() {
     private fun parseProducts(jsonText: String): List<Product> {
         val products = mutableListOf<Product>()
         val jsonArr = JSONArray(jsonText.trim())
-
         for (i in 0 until jsonArr.length()) {
             val item = jsonArr.optJSONObject(i) ?: continue
             products.add(
