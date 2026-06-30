@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -19,7 +20,7 @@ import java.net.URL
 import java.util.concurrent.Executors
 
 class Page2Activity : AppCompatActivity() {
-
+    private val TAG = "SHOP_API_DEBUG"
     private val networkExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val currentProducts = mutableListOf<Product>()
@@ -74,13 +75,15 @@ class Page2Activity : AppCompatActivity() {
         networkExecutor.execute {
             try {
                 val products = fetchProductsFromCloudflareKv()
+                Log.d(TAG, "成功获取商品数量：${products.size}")
                 mainHandler.post {
                     adapter.submitList(products)
                     currentProducts.clear()
                     currentProducts.addAll(products)
                     statusView.text = "已加载 ${products.size} 件云端商品"
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Log.e(TAG, "接口请求/解析失败", e)
                 mainHandler.post {
                     statusView.text = getString(R.string.load_products_failed)
                     adapter.submitList(
@@ -96,14 +99,23 @@ class Page2Activity : AppCompatActivity() {
 
     private fun fetchProductsFromCloudflareKv(): List<Product> {
         val endpoint = getString(R.string.cloudflare_kv_products_url)
+        Log.d(TAG, "请求接口地址：$endpoint")
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 8000
             readTimeout = 8000
+            // 增加UA头，防止Cloudflare拦截
+            setRequestProperty("User-Agent", "Mozilla/5.0 Android App Client")
         }
 
         return try {
+            val code = connection.responseCode
+            Log.d(TAG, "接口响应码：$code")
+            if (code != 200) {
+                throw Exception("接口返回错误码 $code")
+            }
             val responseText = connection.inputStream.bufferedReader().use { it.readText() }
+            Log.d(TAG, "原始返回JSON：$responseText")
             parseProducts(responseText)
         } finally {
             connection.disconnect()
@@ -112,33 +124,49 @@ class Page2Activity : AppCompatActivity() {
 
     private fun parseProducts(jsonText: String): List<Product> {
         val trimmed = jsonText.trim()
-        val array = when {
-            trimmed.startsWith("[") -> JSONArray(trimmed)
-            else -> JSONObject(trimmed).optJSONArray("products") ?: JSONArray()
-        }
         val products = mutableListOf<Product>()
-
-        // 解析标准JSON数组（你的Worker返回格式）
-        if (array.length() > 0) {
-            for (index in 0 until array.length()) {
-                val item = array.optJSONObject(index) ?: continue
-                products.add(
-                    Product(
-                        title = item.optString("title", "未命名商品"),
-                        subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
-                        price = item.optString("price", "¥0"),
-                        tag = item.optString("tag", "推荐"),
-                        accent = item.optString("accent", "#FEF3C7"),
-                        imageUrl = item.optString("imageUrl", "")
+        // 分支1：Worker标准数组 [{}]
+        if (trimmed.startsWith("[")) {
+            val array = JSONArray(trimmed)
+            if (array.length() > 0) {
+                for (index in 0 until array.length()) {
+                    val item = array.optJSONObject(index) ?: continue
+                    products.add(
+                        Product(
+                            title = item.optString("title", "未命名商品"),
+                            subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
+                            price = item.optString("price", "¥0"),
+                            tag = item.optString("tag", "推荐"),
+                            accent = item.optString("accent", "#FEF3C7"),
+                            imageUrl = item.optString("imageUrl", "")
+                        )
                     )
-                )
+                }
             }
             return products
         }
-
-        // 兼容旧KV键值对格式
+        // 分支2：对象 {products:[]} 或 KV键值格式
         try {
             val obj = JSONObject(trimmed)
+            // 先读取标准products数组
+            val arr = obj.optJSONArray("products")
+            if (arr != null && arr.length() > 0) {
+                for (index in 0 until arr.length()) {
+                    val item = arr.optJSONObject(index) ?: continue
+                    products.add(
+                        Product(
+                            title = item.optString("title", "未命名商品"),
+                            subtitle = item.optString("subtitle", item.optString("description", "云端精选商品")),
+                            price = item.optString("price", "¥0"),
+                            tag = item.optString("tag", "推荐"),
+                            accent = item.optString("accent", "#FEF3C7"),
+                            imageUrl = item.optString("imageUrl", "")
+                        )
+                    )
+                }
+                return products
+            }
+            // 兼容老KV key=图片url value=商品名
             val keys = obj.keys()
             while (keys.hasNext()) {
                 val key = keys.next()
@@ -154,10 +182,9 @@ class Page2Activity : AppCompatActivity() {
                     )
                 )
             }
-        } catch (_: Exception) {
-            // 解析失败忽略
+        } catch (e: Exception) {
+            Log.e(TAG, "JSON解析分支异常", e)
         }
-
         return products
     }
 }
