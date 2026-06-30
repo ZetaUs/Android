@@ -81,6 +81,7 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- 修复搜索区域：TextView替换为可输入EditText，增加id -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -98,15 +99,20 @@
                 android:textSize="18sp"
                 tools:ignore="HardcodedText,TextContrastCheck" />
 
-            <TextView
+            <EditText
+                android:id="@+id/etSearch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:text="搜索商品、店铺、品牌"
-                android:textColor="#9CA3AF"
+                android:background="@null"
+                android:hint="搜索商品、店铺、品牌"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#111827"
+                android:textColorHint="#9CA3AF"
                 android:textSize="15sp"
-                tools:ignore="HardcodedText,TextContrastCheck" />
+                tools:ignore="Autofill,HardcodedText,TextFields,TouchTargetSizeCheck,TextContrastCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -154,8 +160,6 @@
             android:textColor="#6B7280"
             android:textSize="13sp"
             tools:ignore="HardcodedText,TextContrastCheck" />
-
-            tools:ignore="HardcodedText" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProducts"
