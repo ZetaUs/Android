@@ -22,7 +22,7 @@
             android:text="云端商品正在加载..."
             android:textColor="#6B7280"
             android:textSize="13sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText,VisualLintSystemUi" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProducts"
