@@ -7,18 +7,20 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- 关键新增 android:clipToOutline="true" 让内部图片跟随圆角裁剪 -->
     <FrameLayout
         android:layout_width="76dp"
         android:layout_height="76dp"
         android:background="@drawable/bg_rounded_rect"
-        android:backgroundTint="#F8FAFC">
+        android:backgroundTint="#F8FAFC"
+        android:clipToOutline="true"
+        tools:ignore="UnusedAttribute">
 
         <ImageView
             android:id="@+id/ivProductImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
-            android:padding="12dp"
             android:scaleType="centerCrop"
             android:src="@drawable/logo"
             tools:ignore="ImageContrastCheck,UnusedAttribute" />
@@ -51,6 +53,7 @@
         android:textColor="#F97316"
         android:textSize="22sp"
         android:textStyle="bold"
+        tools:ignore="TextContrastCheck"
         tools:text="¥299" />
 
     <TextView
@@ -63,7 +66,6 @@
         android:paddingVertical="6dp"
         android:textColor="#92400E"
         android:textSize="12sp"
-        android:textStyle="bold"
         tools:text="新品" />
 
 </LinearLayout>
