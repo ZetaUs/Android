@@ -25,14 +25,11 @@ class Page2Activity : AppCompatActivity() {
     private val TAG = "SHOP_API_DEBUG"
     private val networkExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
-    // 修复1：显式声明泛型 MutableList<Product>
     private val currentProducts = mutableListOf<Product>()
     private lateinit var adapter: ProductAdapter
 
-    // 修复2：添加override、Bundle参数、导入Bundle
     @SuppressLint("MissingInflatedId", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
-        // 强制竖屏
         requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -73,13 +70,11 @@ class Page2Activity : AppCompatActivity() {
                 .start()
         }
 
-        // 搜索框文字实时过滤商品
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val keyword = s.toString().trim()
-                // 修复3：currentProducts明确是List<Product>，it自动识别Product类型
                 val filterList: List<Product> = if (keyword.isEmpty()) {
                     currentProducts
                 } else {
@@ -115,7 +110,6 @@ class Page2Activity : AppCompatActivity() {
                 Log.e(TAG, "请求/解析异常", e)
                 mainHandler.post {
                     statusView.text = getString(R.string.load_products_failed)
-                    // 修复4：mutableListOf显式泛型<Product>
                     adapter.submitList(
                         mutableListOf<Product>(
                             Product("云端商品", "接口加载失败", "--", "错误"),
@@ -150,9 +144,7 @@ class Page2Activity : AppCompatActivity() {
         }
     }
 
-    // 适配KV img/desc/category 字段，自动读取商品图片链接
     private fun parseProducts(jsonText: String): List<Product> {
-        // 修复5：mutableListOf添加<Product>泛型
         val products = mutableListOf<Product>()
         val jsonArr = JSONArray(jsonText.trim())
 
