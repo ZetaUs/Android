@@ -15,7 +15,6 @@
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="RtlEnabled,UnusedAttribute">
-        <!-- 新增 android:screenOrientation="portrait" -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -27,7 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 新增 android:screenOrientation="portrait" -->
         <activity
             android:name=".Page2Activity"
             android:exported="false"
