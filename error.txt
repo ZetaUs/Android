@@ -1,8 +1,15 @@
+
+FAILURE: Build failed with an exception.
+
+* Where:
 Build file 'E:\ZTX\Android\shop\app\build.gradle.kts' line: 1
 
-An exception occurred applying plugin request [id: 'org.jetbrains.kotlin.android']
-> Failed to apply plugin 'org.jetbrains.kotlin.android'.
-   > Cannot add extension with name 'kotlin', as there is an extension already registered with that name.
+* What went wrong:
+Plugin [id: 'com.android.application'] was not found in any of the following sources:
+
+- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+- Included Builds (No included builds contain this plugin)
+- Plugin Repositories (plugin dependency must include a version number for this source)
 
 * Try:
 > Run with --info or --debug option to get more log output.
@@ -10,18 +17,20 @@ An exception occurred applying plugin request [id: 'org.jetbrains.kotlin.android
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.api.plugins.InvalidPluginException: An exception occurred applying plugin request [id: 'org.jetbrains.kotlin.android']
-	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.exceptionOccurred(DefaultPluginRequestApplicator.java:184)
-	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.access$400(DefaultPluginRequestApplicator.java:55)
-	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator$ApplyAction.apply(DefaultPluginRequestApplicator.java:165)
-	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.lambda$applyPlugins$1(DefaultPluginRequestApplicator.java:135)
-	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.applyPlugins(DefaultPluginRequestApplicator.java:135)
+org.gradle.api.plugins.UnknownPluginException: Plugin [id: 'com.android.application'] was not found in any of the following sources:
+
+- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+- Included Builds (No included builds contain this plugin)
+- Plugin Repositories (plugin dependency must include a version number for this source)
+	at org.gradle.plugin.use.resolve.internal.PluginResolutionResult.getFound(PluginResolutionResult.java:112)
+	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.resolvePluginRequest(DefaultPluginRequestApplicator.java:198)
+	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.applyPlugins(DefaultPluginRequestApplicator.java:102)
 	at org.gradle.kotlin.dsl.provider.PluginRequestsHandler.handle(PluginRequestsHandler.kt:45)
 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost.applyPluginsTo(KotlinScriptEvaluator.kt:246)
 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.applyPluginsTo(Interpreter.kt:395)
 	at Program.execute(Unknown Source)
 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.eval(Interpreter.kt:526)
-	at org.gradle.kotlin.dsl.execution.Interpreter.eval(Interpreter.kt:199)
+	at org.gradle.kotlin.dsl.execution.Interpreter.eval(Interpreter.kt:219)
 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator.evaluate(KotlinScriptEvaluator.kt:135)
 	at org.gradle.kotlin.dsl.provider.KotlinScriptPluginFactory.create$lambda$0(KotlinScriptPluginFactory.kt:61)
 	at org.gradle.kotlin.dsl.provider.KotlinScriptPlugin.apply(KotlinScriptPlugin.kt:35)
@@ -244,35 +253,6 @@ org.gradle.api.plugins.InvalidPluginException: An exception occurred applying pl
 	at org.gradle.launcher.daemon.server.DaemonStateCoordinator.lambda$runCommand$0(DaemonStateCoordinator.java:321)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
-Caused by: org.gradle.api.internal.plugins.PluginApplicationException: Failed to apply plugin 'org.jetbrains.kotlin.android'.
-	at org.gradle.api.internal.plugins.DefaultPluginManager.doApply(DefaultPluginManager.java:176)
-	at org.gradle.api.internal.plugins.DefaultPluginManager.apply(DefaultPluginManager.java:139)
-	at org.gradle.plugin.use.resolve.internal.ClassPathPluginResolution.applyTo(ClassPathPluginResolution.java:49)
-	at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator$ApplyAction.apply(DefaultPluginRequestApplicator.java:161)
-	... 230 more
-Caused by: java.lang.IllegalArgumentException: Cannot add extension with name 'kotlin', as there is an extension already registered with that name.
-	at org.gradle.internal.extensibility.ExtensionsStorage.add(ExtensionsStorage.java:40)
-	at org.gradle.internal.extensibility.DefaultExtensionContainer.add(DefaultExtensionContainer.java:78)
-	at org.gradle.internal.extensibility.DefaultExtensionContainer.addWithDefaultPublicType(DefaultExtensionContainer.java:170)
-	at org.gradle.internal.extensibility.DefaultExtensionContainer.create(DefaultExtensionContainer.java:84)
-	at org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtensionKt.createKotlinExtension(KotlinProjectExtension.kt:44)
-	at org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper.apply(KotlinPluginWrapper.kt:221)
-	at org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper.apply(PluginWrappers.kt:34)
-	at org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper.apply(PluginWrappers.kt:26)
-	at org.gradle.api.internal.plugins.ImperativeOnlyPluginTarget.applyImperative(ImperativeOnlyPluginTarget.java:55)
-	at org.gradle.api.internal.plugins.RuleBasedPluginTarget.applyImperative(RuleBasedPluginTarget.java:50)
-	at org.gradle.api.internal.plugins.DefaultPluginManager.addPlugin(DefaultPluginManager.java:190)
-	at org.gradle.api.internal.plugins.DefaultPluginManager.access$100(DefaultPluginManager.java:54)
-	at org.gradle.api.internal.plugins.DefaultPluginManager$AddPluginBuildOperation.run(DefaultPluginManager.java:285)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:30)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:27)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:48)
-	at org.gradle.api.internal.plugins.DefaultPluginManager.lambda$doApply$0(DefaultPluginManager.java:170)
-	at org.gradle.internal.code.DefaultUserCodeApplicationContext.apply(DefaultUserCodeApplicationContext.java:44)
-	at org.gradle.api.internal.plugins.DefaultPluginManager.doApply(DefaultPluginManager.java:169)
-	... 233 more
-Fix with AI
+
+
+CONFIGURE FAILED in 1s
