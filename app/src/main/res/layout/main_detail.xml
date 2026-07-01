@@ -8,8 +8,9 @@
 
     <ImageView
         android:id="@+id/ivDetailImg"
-        android:layout_width="390dp"
+        android:layout_width="match_parent"
         android:layout_height="260dp"
+        android:layout_gravity="start"
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
 
