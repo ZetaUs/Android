@@ -1,5 +1,9 @@
 package com.zztx.shop
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Product(
     val title: String,
     val subtitle: String,
@@ -7,4 +11,4 @@ data class Product(
     val tag: String,
     val accent: String = "#FEF3C7",
     val imageUrl: String? = null
-)
+) : Parcelable
