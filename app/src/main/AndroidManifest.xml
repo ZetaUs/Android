@@ -34,7 +34,6 @@
         <activity
             android:name=".Page3Activity"
             android:exported="false" />
-        <!-- 新增商品详情页面注册 -->
         <activity
             android:name=".PageDetailActivity"
             android:exported="false"/>

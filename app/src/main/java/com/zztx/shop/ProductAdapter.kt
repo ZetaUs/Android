@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+// 必须导入Gson
+import com.google.gson.Gson
+
 class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
@@ -31,13 +34,14 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Di
             tagView.setBackgroundResource(if (product.tag == "秒杀") R.drawable.bg_badge_blue else R.drawable.bg_badge_yellow)
             productImage.load(product.imageUrl) {
                 crossfade(true)
-                placeholder(R.drawable.ic_launcher_foreground)
-                error(R.drawable.ic_launcher_foreground)
+                placeholder(android.R.drawable.ic_menu_gallery)
+                error(android.R.drawable.stat_notify_error)
             }
-            // 新增：点击商品跳转详情
+
             itemView.setOnClickListener {
+                val json = Gson().toJson(product)
                 val intent = Intent(itemView.context, PageDetailActivity::class.java)
-                intent.putExtra("goods_data", product)
+                intent.putExtra("goods_json", json)
                 itemView.context.startActivity(intent)
             }
         }
