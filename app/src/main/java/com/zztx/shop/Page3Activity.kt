@@ -67,7 +67,7 @@ class Page3Activity : AppCompatActivity() {
 
     // 复用同一个Worker商品接口
     private fun fetchProductsFromCloudflareKv(): List<Product> {
-        val endpoint = getString(R.string.cloudflare_kv_products_url)
+        val endpoint = getString(R.string.cloudflare_kv_shop_url)
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 8000
