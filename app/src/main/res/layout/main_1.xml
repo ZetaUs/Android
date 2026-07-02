@@ -12,12 +12,15 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="264dp"
+        android:background="@drawable/bg_logo_circle"
+        android:clipToOutline="true"
         android:contentDescription="@string/app_name"
-        android:scaleType="fitCenter"
+        android:padding="6dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/bg_logox_circle" />
+        app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
