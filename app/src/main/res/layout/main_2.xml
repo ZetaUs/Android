@@ -74,10 +74,11 @@
                     android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:background="@drawable/bg_logo_circle"
+                    android:backgroundTint="#FF2563EB"
                     android:contentDescription="@string/app_name"
                     android:padding="12dp"
                     android:src="@drawable/logo"
-                    tools:ignore="ImageContrastCheck,UnusedAttribute" />
+                    tools:ignore="UnusedAttribute" />
             </LinearLayout>
         </LinearLayout>
 
