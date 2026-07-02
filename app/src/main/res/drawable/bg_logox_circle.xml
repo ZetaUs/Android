@@ -7,5 +7,5 @@
     </item>
     <item
         android:drawable="@drawable/logo"
-        android:inset="8dp" />
+        android:inset="20dp" />
 </layer-list>
