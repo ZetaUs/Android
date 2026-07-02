@@ -3,12 +3,9 @@
     <item>
         <shape android:shape="oval">
             <solid android:color="#FFFFFFFF" />
-            <stroke
-                android:width="2dp"
-                android:color="#FF444444" />
         </shape>
     </item>
     <item
         android:drawable="@drawable/logo"
-        android:inset="24dp" />
+        android:inset="25dp" />
 </layer-list>
