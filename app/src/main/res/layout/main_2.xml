@@ -118,7 +118,7 @@
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"
-                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck" />
+                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
             <TextView
                 android:id="@+id/btnFilter"
