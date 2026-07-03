@@ -23,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
-import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
@@ -88,7 +87,7 @@ class Page2Activity : AppCompatActivity() {
         fun applySearchFilter() {
             val keyword = etSearch.text.toString().trim()
             val filterList: List<Product> = if (keyword.isEmpty()) {
-                currentProducts.toList()
+                currentProducts
             } else {
                 currentProducts.filter { item ->
                     item.title.contains(keyword, ignoreCase = true) ||
@@ -157,13 +156,12 @@ class Page2Activity : AppCompatActivity() {
                 mainHandler.post {
                     statusView.text = getString(R.string.load_products_failed)
                     val fallback = mutableListOf(
-                        Product("未知商品", "用于验证搜索是否命中（接口加载失败兜底）", "--", "未知"),
                         Product("云端商品", "接口加载失败", "--", "错误"),
                         Product("检查项", "确认Worker正常部署", "--", "提示")
                     )
                     currentProducts.clear()
                     currentProducts.addAll(fallback)
-                    adapter.submitList(fallback.toList())
+                    adapter.submitList(fallback)
                 }
             }
         }
@@ -192,63 +190,20 @@ class Page2Activity : AppCompatActivity() {
 
     private fun parseProducts(jsonText: String): List<Product> {
         val products = mutableListOf<Product>()
-        val trimmed = jsonText.trim()
-
-        fun collectFrom(jsonArr: JSONArray) {
-            for (i in 0 until jsonArr.length()) {
-                val item = jsonArr.optJSONObject(i) ?: continue
-                products.add(
-                    Product(
-                        title = item.optString("title", "未命名商品"),
-                        subtitle = item.optString("desc", "云端精选商品"),
-                        price = "¥" + item.optString("price", "0"),
-                        tag = item.optString("category", "推荐"),
-                        accent = item.optString("accent", "#FEF3C7"),
-                        imageUrl = item.optString("imageUrl", item.optString("img", ""))
-                    )
+        val jsonArr = JSONArray(jsonText.trim())
+        for (i in 0 until jsonArr.length()) {
+            val item = jsonArr.optJSONObject(i) ?: continue
+            products.add(
+                Product(
+                    title = item.optString("title", "未命名商品"),
+                    subtitle = item.optString("desc", "云端精选商品"),
+                    price = "¥" + item.optString("price", "0"),
+                    tag = item.optString("category", "推荐"),
+                    accent = item.optString("accent", "#FEF3C7"),
+                    imageUrl = item.optString("imageUrl", item.optString("img", ""))
                 )
-            }
+            )
         }
-
-        // 优先按 JSONObject 解包装：goods / products / items / shops / data / list / result
-        if (trimmed.startsWith("{")) {
-            try {
-                val root = JSONObject(trimmed)
-                val wrapperKeys = listOf(
-                    "goods", "products", "items", "shops",
-                    "data", "list", "result"
-                )
-                Log.d(TAG, "parseProducts 顶层为 JSONObject，keys=${root.keys().asSequence().toList()}")
-                var picked: JSONArray? = null
-                for (key in wrapperKeys) {
-                    val candidate = root.opt(key)
-                    if (candidate is JSONArray) { picked = candidate; break }
-                }
-                // data 下再套一层 goods/products 的情况
-                if (picked == null) {
-                    val data = root.opt("data")
-                    if (data is JSONObject) {
-                        for (key in wrapperKeys) {
-                            val candidate = data.opt(key)
-                            if (candidate is JSONArray) { picked = candidate; break }
-                        }
-                    }
-                }
-                if (picked != null) {
-                    collectFrom(picked)
-                    Log.d(TAG, "解析命中包装数组，数量=${products.size}")
-                    return products
-                }
-                // 实在找不到数组，抛出异常走 fallback
-                throw Exception("JSONObject 中未找到商品数组字段（仅包含：${root.keys().asSequence().toList()}）")
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-
-        // 顶层直接是数组
-        val jsonArr = JSONArray(trimmed)
-        collectFrom(jsonArr)
         return products
     }
 }
