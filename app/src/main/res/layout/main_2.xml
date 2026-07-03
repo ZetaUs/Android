@@ -132,7 +132,7 @@
                 android:text="筛选"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
         </LinearLayout>
 
         <LinearLayout
