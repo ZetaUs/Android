@@ -44,36 +44,45 @@ class Page2Activity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.main_2)
 
+        val coordinator = findViewById<CoordinatorLayout>(R.id.coordinatorRoot)
         val root = findViewById<LinearLayout>(R.id.main2)
         val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
         val productsList = findViewById<RecyclerView>(R.id.rvProducts)
         val etSearch = findViewById<EditText>(R.id.etSearch)
         val btnFilter = findViewById<TextView>(R.id.btnFilter)
-        val tvMore = findViewById<TextView>(R.id.tvMore)
         adapter = ProductAdapter()
 
         productsList.layoutManager = GridLayoutManager(this, 2)
         productsList.adapter = adapter
-        root.alpha = 0f
-        root.translationY = 24f
-        val defaultPaddingLeft = root.paddingLeft
-        val defaultPaddingTop = root.paddingTop
-        val defaultPaddingRight = root.paddingRight
-        val defaultPaddingBottom = root.paddingBottom
+        coordinator.alpha = 0f
+        coordinator.translationY = 24f
+        val defaultPaddingLeft = coordinator.paddingLeft
+        val defaultPaddingTop = coordinator.paddingTop
+        val defaultPaddingRight = coordinator.paddingRight
+        val defaultPaddingBottom = coordinator.paddingBottom
+        val rootDefaultPaddingBottom = root.paddingBottom
 
-        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(coordinator) { v, insets ->
             val systemBar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val bottomInset = (systemBar.bottom).coerceAtLeast(ime.bottom)
             v.setPadding(
                 defaultPaddingLeft + systemBar.left,
                 defaultPaddingTop + systemBar.top,
                 defaultPaddingRight + systemBar.right,
-                defaultPaddingBottom + systemBar.bottom
+                defaultPaddingBottom + bottomInset
+            )
+            root.setPadding(
+                root.paddingLeft,
+                root.paddingTop,
+                root.paddingRight,
+                rootDefaultPaddingBottom + bottomInset
             )
             insets
         }
 
-        root.post {
-            root.animate()
+        coordinator.post {
+            coordinator.animate()
                 .alpha(1f)
                 .translationY(0f)
                 .setDuration(420)
@@ -133,12 +142,6 @@ class Page2Activity : AppCompatActivity() {
         // 筛选按钮占位
         btnFilter.setOnClickListener {
             Toast.makeText(this, "筛选功能开发中…", Toast.LENGTH_SHORT).show()
-        }
-
-        // 查看更多跳转（修复：先创建Page3Activity再使用）
-        tvMore.setOnClickListener {
-            val jumpIntent = Intent(this, Page3Activity::class.java)
-            startActivity(jumpIntent)
         }
 
         loadProducts(productsStatus, ::applySearchFilter)
