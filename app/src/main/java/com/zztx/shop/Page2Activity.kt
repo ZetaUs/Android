@@ -32,6 +32,7 @@ class Page2Activity : AppCompatActivity() {
     private val networkExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val currentProducts = mutableListOf<Product>()
+    private val currentProductsRaw = mutableListOf<String>()
     // 修复1：lateinit显式标注类型 ProductAdapter
     private lateinit var adapter: ProductAdapter
 
@@ -89,10 +90,14 @@ class Page2Activity : AppCompatActivity() {
             val filterList: List<Product> = if (keyword.isEmpty()) {
                 currentProducts
             } else {
-                currentProducts.filter { item ->
-                    item.title.contains(keyword, ignoreCase = true) ||
+                currentProducts.filterIndexed { idx, item ->
+                    val hitFields = item.title.contains(keyword, ignoreCase = true) ||
                             item.subtitle.contains(keyword, ignoreCase = true) ||
                             item.tag.contains(keyword, ignoreCase = true)
+                    if (hitFields) return@filterIndexed true
+                    val hitRaw = currentProductsRaw.getOrNull(idx)
+                        ?.contains(keyword, ignoreCase = true) == true
+                    hitRaw
                 }
             }
             adapter.submitList(filterList)
@@ -143,11 +148,13 @@ class Page2Activity : AppCompatActivity() {
         statusView.text = getString(R.string.loading_products)
         networkExecutor.execute {
             try {
-                val products = fetchProductsFromCloudflareKv()
+                val (products, rawTexts) = fetchProductsFromCloudflareKv()
                 Log.d(TAG, "商品加载成功，数量：${products.size}")
                 mainHandler.post {
                     currentProducts.clear()
+                    currentProductsRaw.clear()
                     currentProducts.addAll(products)
+                    currentProductsRaw.addAll(rawTexts)
                     onDataReady()
                     statusView.text = "已加载 ${products.size} 件云端商品"
                 }
@@ -159,16 +166,19 @@ class Page2Activity : AppCompatActivity() {
                         Product("云端商品", "接口加载失败", "--", "错误"),
                         Product("检查项", "确认Worker正常部署", "--", "提示")
                     )
+                    val fallbackRaw = fallback.map { "${it.title}|${it.subtitle}|${it.tag}|${it.price}" }
                     currentProducts.clear()
+                    currentProductsRaw.clear()
                     currentProducts.addAll(fallback)
+                    currentProductsRaw.addAll(fallbackRaw)
                     adapter.submitList(fallback)
                 }
             }
         }
     }
 
-    private fun fetchProductsFromCloudflareKv(): List<Product> {
-        val endpoint = getString(R.string.cloudflare_kv_products_url)
+    private fun fetchProductsFromCloudflareKv(): Pair<List<Product>, List<String>> {
+        val endpoint = getString(R.string.cloudflare_kv_shop_url)
         Log.d(TAG, "请求地址：$endpoint")
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
@@ -188,22 +198,25 @@ class Page2Activity : AppCompatActivity() {
         }
     }
 
-    private fun parseProducts(jsonText: String): List<Product> {
+    private fun parseProducts(jsonText: String): Pair<List<Product>, List<String>> {
         val products = mutableListOf<Product>()
+        val rawTexts = mutableListOf<String>()
         val jsonArr = JSONArray(jsonText.trim())
         for (i in 0 until jsonArr.length()) {
             val item = jsonArr.optJSONObject(i) ?: continue
-            products.add(
-                Product(
-                    title = item.optString("title", "未命名商品"),
-                    subtitle = item.optString("desc", "云端精选商品"),
-                    price = "¥" + item.optString("price", "0"),
-                    tag = item.optString("category", "推荐"),
-                    accent = item.optString("accent", "#FEF3C7"),
-                    imageUrl = item.optString("imageUrl", item.optString("img", ""))
-                )
+            val raw = item.toString()
+            val product = Product(
+                title = item.optString("title", "未命名商品"),
+                subtitle = item.optString("desc", "云端精选商品"),
+                price = "¥" + item.optString("price", "0"),
+                tag = item.optString("category", "推荐"),
+                accent = item.optString("accent", "#FEF3C7"),
+                imageUrl = item.optString("imageUrl", item.optString("img", ""))
             )
+            products.add(product)
+            rawTexts.add(raw)
+            Log.d(TAG, "商品[$i] raw[前120]=${raw.take(120)} → title=${product.title} tag=${product.tag} sub=${product.subtitle.take(40)}")
         }
-        return products
+        return products to rawTexts
     }
 }
