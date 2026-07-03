@@ -1,92 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_mall_page"
-    android:fillViewport="true">
+    android:background="@drawable/bg_mall_page">
 
-    <LinearLayout
-        android:id="@+id/main2"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        android:paddingTop="40dp"
-        tools:context=".Page2Activity"
-        tools:ignore="ExtraText">
+        android:background="@android:color/transparent"
+        app:elevation="0dp"
+        android:outlineProvider="none"
+        tools:ignore="UnusedAttribute">
 
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="@drawable/bg_hero_banner"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            tools:ignore="DisableBaselineAlignment,TextSizeCheck">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleEnabled="false"
+            app:contentScrim="@android:color/transparent"
+            app:scrimAnimationDuration="0">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/bg_hero_banner"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7"
+                tools:ignore="DisableBaselineAlignment,TextSizeCheck">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:text="商城精选"
-                    android:textColor="#FFFFFF"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:text="品质好物、限时优惠、今天就买到心动价"
-                    android:textColor="#D8E2F1"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="商城精选"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:background="@drawable/bg_button_dark"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="10dp"
-                    android:text="立即逛逛"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="品质好物、限时优惠、今天就买到心动价"
+                        android:textColor="#D8E2F1"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:background="@drawable/bg_button_dark"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        android:text="立即逛逛"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="88dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="82dp"
+                        android:layout_height="82dp"
+                        android:background="@drawable/bg_logo_circle"
+                        android:backgroundTint="#FFFFFF"
+                        android:contentDescription="@string/app_name"
+                        android:padding="12dp"
+                        android:src="@drawable/logo"
+                        tools:ignore="UnusedAttribute" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="88dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-                <ImageView
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:background="@drawable/bg_logo_circle"
-                    android:backgroundTint="#FFFFFF"
-                    android:contentDescription="@string/app_name"
-                    android:padding="12dp"
-                    android:src="@drawable/logo"
-                    tools:ignore="UnusedAttribute" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 修复搜索区域：TextView替换为可输入EditText，增加id -->
+        <!-- 搜索栏：没有 layout_scrollFlags → AppBarLayout 展开后 Banner 滚走，这行自动吸顶 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_search_bar"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -118,7 +134,7 @@
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"
-                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
+                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck" />
 
             <TextView
                 android:id="@+id/btnFilter"
@@ -132,54 +148,66 @@
                 android:text="筛选"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                tools:ignore="HardcodedText" />
         </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 滚动内容区：标题、状态文本、商品网格 -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
+            android:id="@+id/main2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="20dp"
+            tools:context=".Page2Activity"
+            tools:ignore="ExtraText">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="平台商品"
+                    android:textColor="#111827"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="305dp"
+                android:id="@+id/tvProductsStatus"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="平台商品"
-                android:textColor="#111827"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText,InefficientWeight" />
-
-            <TextView
-                android:id="@+id/tvMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="查看更多"
+                android:layout_marginTop="10dp"
+                android:text="云端商品正在加载..."
                 android:textColor="#6B7280"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 tools:ignore="HardcodedText,TextContrastCheck" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProducts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingBottom="8dp"
+                tools:listitem="@layout/item_product" />
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/tvProductsStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="云端商品正在加载..."
-            android:textColor="#6B7280"
-            android:textSize="13sp"
-            tools:ignore="HardcodedText,TextContrastCheck" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvProducts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:nestedScrollingEnabled="false"
-            android:clipToPadding="false"
-            android:paddingBottom="8dp"
-            tools:listitem="@layout/item_product" />
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
