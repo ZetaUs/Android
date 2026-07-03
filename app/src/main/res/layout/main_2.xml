@@ -103,22 +103,30 @@
             <EditText
                 android:id="@+id/etSearch"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@null"
+                android:gravity="center_vertical"
                 android:hint="搜索商品、店铺、品牌"
+                android:imeOptions="actionSearch|flagNoExtractUi"
+                android:inputType="text|textNoSuggestions|textCapWords"
                 android:maxLines="1"
+                android:paddingHorizontal="2dp"
+                android:paddingVertical="8dp"
                 android:singleLine="true"
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"
-                tools:ignore="Autofill,HardcodedText,TextFields,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
+                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck" />
 
             <TextView
+                android:id="@+id/btnFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_button_dark"
+                android:clickable="true"
+                android:focusable="true"
                 android:paddingHorizontal="14dp"
                 android:paddingVertical="8dp"
                 android:text="筛选"

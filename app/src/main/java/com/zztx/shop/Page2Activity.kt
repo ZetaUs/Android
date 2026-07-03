@@ -8,9 +8,11 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -41,6 +43,7 @@ class Page2Activity : AppCompatActivity() {
         val productsStatus = findViewById<TextView>(R.id.tvProductsStatus)
         val productsList = findViewById<RecyclerView>(R.id.rvProducts)
         val etSearch = findViewById<EditText>(R.id.etSearch)
+        val btnFilter = findViewById<TextView>(R.id.btnFilter)
         val tvMore = findViewById<TextView>(R.id.tvMore)
         adapter = ProductAdapter()
 
@@ -74,23 +77,37 @@ class Page2Activity : AppCompatActivity() {
         }
 
         // 搜索过滤
+        fun applySearchFilter() {
+            val keyword = etSearch.text.toString().trim()
+            val filterList: List<Product> = if (keyword.isEmpty()) {
+                currentProducts
+            } else {
+                currentProducts.filter { item ->
+                    item.title.contains(keyword, ignoreCase = true) ||
+                            item.subtitle.contains(keyword, ignoreCase = true) ||
+                            item.tag.contains(keyword, ignoreCase = true)
+                }
+            }
+            adapter.submitList(filterList)
+        }
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val keyword = s.toString().trim()
-                val filterList: List<Product> = if (keyword.isEmpty()) {
-                    currentProducts
-                } else {
-                    currentProducts.filter { item ->
-                        item.title.contains(keyword, ignoreCase = true) ||
-                                item.subtitle.contains(keyword, ignoreCase = true) ||
-                                item.tag.contains(keyword, ignoreCase = true)
-                    }
-                }
-                adapter.submitList(filterList)
+                applySearchFilter()
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                applySearchFilter()
+                true
+            } else false
+        }
+
+        // 筛选按钮占位
+        btnFilter.setOnClickListener {
+            Toast.makeText(this, "筛选功能开发中…", Toast.LENGTH_SHORT).show()
+        }
 
         // 查看更多跳转（修复：先创建Page3Activity再使用）
         tvMore.setOnClickListener {
@@ -98,32 +115,33 @@ class Page2Activity : AppCompatActivity() {
             startActivity(jumpIntent)
         }
 
-        loadProducts(productsStatus)
+        loadProducts(productsStatus, etSearch, ::applySearchFilter)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadProducts(statusView: TextView) {
+    private fun loadProducts(statusView: TextView, etSearch: EditText, onDataReady: () -> Unit) {
         statusView.text = getString(R.string.loading_products)
         networkExecutor.execute {
             try {
                 val products = fetchProductsFromCloudflareKv()
                 Log.d(TAG, "商品加载成功，数量：${products.size}")
                 mainHandler.post {
-                    adapter.submitList(products)
                     currentProducts.clear()
                     currentProducts.addAll(products)
+                    onDataReady()
                     statusView.text = "已加载 ${products.size} 件云端商品"
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "请求/解析异常", e)
                 mainHandler.post {
                     statusView.text = getString(R.string.load_products_failed)
-                    adapter.submitList(
-                        mutableListOf<Product>(
-                            Product("云端商品", "接口加载失败", "--", "错误"),
-                            Product("检查项", "确认Worker正常部署", "--", "提示")
-                        )
+                    val fallback = mutableListOf(
+                        Product("云端商品", "接口加载失败", "--", "错误"),
+                        Product("检查项", "确认Worker正常部署", "--", "提示")
                     )
+                    currentProducts.clear()
+                    currentProducts.addAll(fallback)
+                    adapter.submitList(fallback)
                 }
             }
         }
