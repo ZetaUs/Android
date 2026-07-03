@@ -115,11 +115,11 @@ class Page2Activity : AppCompatActivity() {
             startActivity(jumpIntent)
         }
 
-        loadProducts(productsStatus, etSearch, ::applySearchFilter)
+        loadProducts(productsStatus, ::applySearchFilter)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadProducts(statusView: TextView, etSearch: EditText, onDataReady: () -> Unit) {
+    private fun loadProducts(statusView: TextView, onDataReady: () -> Unit) {
         statusView.text = getString(R.string.loading_products)
         networkExecutor.execute {
             try {
