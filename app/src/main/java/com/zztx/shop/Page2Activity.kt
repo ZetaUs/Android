@@ -1,6 +1,7 @@
 package com.zztx.shop
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +9,9 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -77,6 +80,10 @@ class Page2Activity : AppCompatActivity() {
         }
 
         // 搜索过滤
+        fun hideKeyboard() {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(etSearch.windowToken, 0)
+        }
         fun applySearchFilter() {
             val keyword = etSearch.text.toString().trim()
             val filterList: List<Product> = if (keyword.isEmpty()) {
@@ -97,11 +104,24 @@ class Page2Activity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
-        etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+        etSearch.setOnEditorActionListener { v, actionId, event ->
+            val isActionSearch = when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH,
+                EditorInfo.IME_ACTION_DONE,
+                EditorInfo.IME_ACTION_GO,
+                EditorInfo.IME_ACTION_SEND,
+                EditorInfo.IME_ACTION_NEXT,
+                EditorInfo.IME_ACTION_UNSPECIFIED -> true
+                else -> false
+            }
+            val isEnterKey = event?.keyCode == KeyEvent.KEYCODE_ENTER &&
+                    (event.action == KeyEvent.ACTION_UP || event.action == KeyEvent.ACTION_DOWN)
+            if (isActionSearch || isEnterKey) {
                 applySearchFilter()
-                true
-            } else false
+                hideKeyboard()
+                return@setOnEditorActionListener true
+            }
+            false
         }
 
         // 筛选按钮占位
