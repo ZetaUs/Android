@@ -33,9 +33,6 @@
             android:windowSoftInputMode="adjustResize"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
-            android:name=".Page3Activity"
-            android:exported="false" />
-        <activity
             android:name=".PageDetailActivity"
             android:exported="false"/>
     </application>
