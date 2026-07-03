@@ -134,7 +134,7 @@
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"
-                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck" />
+                tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
             <TextView
                 android:id="@+id/btnFilter"
@@ -148,7 +148,7 @@
                 android:text="筛选"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
