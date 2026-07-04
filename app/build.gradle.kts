@@ -38,6 +38,10 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("io.coil-kt:coil:2.6.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.tencent.mm.opensdk:wechat-sdk-android:6.8.24") {
+        exclude(group = "com.android.support", module = "support-v4")
+    }
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
