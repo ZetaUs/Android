@@ -279,153 +279,158 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- 底部悬浮购买栏：放在 CoordinatorLayout 最上层，layout_gravity=bottom 吸底；高度96dp左右，白底+顶部分割线 -->
+    <!-- 底部悬浮购买栏：外层 vertical = 顶部0.5dp分割线 + 内层horizontal（3icon+2按钮） -->
     <LinearLayout
-        android:id="@+id/detailBottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#FFFFFF"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="10dp">
+        android:orientation="vertical">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_gravity="top"
             android:background="#E5E7EB" />
 
-        <!-- 左侧 3 个 Icon：客服 / 收藏 / 分享 每个 vertical -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/detailBottomBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
+            android:background="#FFFFFF"
             android:gravity="center_vertical"
-            tools:ignore="DisableBaselineAlignment">
-
-            <LinearLayout
-                android:id="@+id/btnService"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingVertical="4dp"
-                tools:ignore="NestedWeights">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="☎"
-                    android:textColor="#111827"
-                    android:textSize="20sp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="客服"
-                    android:textColor="#6B7280"
-                    android:textSize="11sp"
-                    tools:ignore="HardcodedText,SmallSp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btnFavorite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingVertical="4dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="♡"
-                    android:textColor="#111827"
-                    android:textSize="20sp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="收藏"
-                    android:textColor="#6B7280"
-                    android:textSize="11sp"
-                    tools:ignore="HardcodedText,SmallSp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btnBottomShare"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingVertical="4dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⇧"
-                    android:textColor="#111827"
-                    android:textSize="20sp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="分享"
-                    android:textColor="#6B7280"
-                    android:textSize="11sp"
-                    tools:ignore="HardcodedText,SmallSp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 右侧 2 个按钮：加入购物车 / 立即购买；整体容器 wrap_content，和左侧3图标用 weight=1 分开 -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp">
 
-            <TextView
-                android:id="@+id/btnAddCart"
-                android:layout_width="108dp"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:background="@drawable/bg_button_cart"
-                android:text="加入购物车"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+            <!-- 左侧 3 个 Icon：客服 / 收藏 / 分享 每个 vertical -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                tools:ignore="DisableBaselineAlignment">
 
-            <TextView
-                android:id="@+id/btnBuyNow"
-                android:layout_width="108dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:background="@drawable/bg_button_buy"
-                android:text="立即购买"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+                <LinearLayout
+                    android:id="@+id/btnService"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="4dp"
+                    tools:ignore="NestedWeights">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="☎"
+                        android:textColor="#111827"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="客服"
+                        android:textColor="#6B7280"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText,SmallSp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnFavorite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="♡"
+                        android:textColor="#111827"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="收藏"
+                        android:textColor="#6B7280"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText,SmallSp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnBottomShare"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⇧"
+                        android:textColor="#111827"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="分享"
+                        android:textColor="#6B7280"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText,SmallSp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 右侧 2 个按钮：加入购物车(浅橙深字) / ¥立即支付(主橙白字)；整体容器 wrap_content，和左侧3图标用 weight=1 分开 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btnAddCart"
+                    android:layout_width="108dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_button_cart"
+                    android:gravity="center"
+                    android:text="加入购物车"
+                    android:textColor="#111827"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/btnBuyNow"
+                    android:layout_width="108dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_button_buy"
+                    android:gravity="center"
+                    android:text="¥ 立即支付"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

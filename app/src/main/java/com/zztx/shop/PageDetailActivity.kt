@@ -72,7 +72,7 @@ class PageDetailActivity : AppCompatActivity() {
             Toast.makeText(this, "已加入购物车（占位）", Toast.LENGTH_SHORT).show()
         }
         findViewById<View>(R.id.btnBuyNow).setOnClickListener {
-            Toast.makeText(this, "结算功能开发中…", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "正在跳转支付…（占位）", Toast.LENGTH_SHORT).show()
         }
 
         val jsonStr = intent.getStringExtra("goods_json")
