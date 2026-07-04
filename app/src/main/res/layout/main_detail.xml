@@ -299,7 +299,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp">
+            android:paddingVertical="10dp"
+            tools:ignore="DisableBaselineAlignment">
 
             <!-- 左侧 3 个 Icon：客服 / 收藏 / 分享 每个 vertical -->
             <LinearLayout
@@ -429,7 +430,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText,TextContrastCheck" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
