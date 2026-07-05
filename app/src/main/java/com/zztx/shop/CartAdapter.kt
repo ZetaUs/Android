@@ -42,10 +42,9 @@ class CartAdapter(
         private val tvQty: TextView = itemView.findViewById(R.id.tvCartItemQty)
 
         fun bind(item: CartItem) {
-            cb.setOnCheckedChangeListener(null)
             cb.isChecked = item.checked
             cb.setOnCheckedChangeListener { _, isChecked ->
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onCheckedChanged(item, isChecked)
                 }
             }
@@ -60,16 +59,16 @@ class CartAdapter(
                 error(android.R.drawable.stat_notify_error)
             }
             btnPlus.setOnClickListener {
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) onPlus(item)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) onPlus(item)
             }
             btnMinus.setOnClickListener {
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) onMinus(item)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) onMinus(item)
             }
             btnDelete.setOnClickListener {
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) onDelete(item)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) onDelete(item)
             }
             itemView.setOnClickListener {
-                if (bindingAdapterPosition != RecyclerView.NO_POSITION) onClickItem(item)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) onClickItem(item)
             }
         }
     }
