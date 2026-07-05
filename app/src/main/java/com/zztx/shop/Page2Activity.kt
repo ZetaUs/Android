@@ -13,6 +13,7 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -142,6 +143,10 @@ class Page2Activity : AppCompatActivity() {
         // 筛选按钮占位
         btnFilter.setOnClickListener {
             Toast.makeText(this, "筛选功能开发中…", Toast.LENGTH_SHORT).show()
+        }
+        // 购物车入口
+        findViewById<ImageView>(R.id.ivCartEntry).setOnClickListener {
+            startActivity(Intent(this@Page2Activity, PageCartActivity::class.java))
         }
 
         loadProducts(productsStatus, ::applySearchFilter)

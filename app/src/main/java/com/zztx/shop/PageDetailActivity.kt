@@ -1,5 +1,6 @@
 package com.zztx.shop
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -65,6 +66,9 @@ class PageDetailActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnMore).setOnClickListener {
             Toast.makeText(this, "更多菜单开发中…", Toast.LENGTH_SHORT).show()
         }
+        findViewById<View>(R.id.btnTopCart).setOnClickListener {
+            startActivity(Intent(this, PageCartActivity::class.java))
+        }
 
         // 底部：客服 / 收藏 / 分享 + 加入购物车 / 立即购买
         findViewById<View>(R.id.btnService).setOnClickListener {
@@ -77,7 +81,12 @@ class PageDetailActivity : AppCompatActivity() {
             Toast.makeText(this, "分享功能开发中…", Toast.LENGTH_SHORT).show()
         }
         findViewById<View>(R.id.btnAddCart).setOnClickListener {
-            Toast.makeText(this, "已加入购物车（占位）", Toast.LENGTH_SHORT).show()
+            val g = currentGoods ?: run {
+                Toast.makeText(this, "商品数据异常，无法加入购物车", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            val qty = CartManager.add(this, g, 1)
+            Toast.makeText(this, "已加入购物车（数量 $qty）：${g.title}", Toast.LENGTH_SHORT).show()
         }
         findViewById<View>(R.id.btnBuyNow).setOnClickListener { v ->
             val goods = currentGoods ?: run {

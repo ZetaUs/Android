@@ -136,6 +136,20 @@
                 android:textSize="15sp"
                 tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
+            <ImageView
+                android:id="@+id/ivCartEntry"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/app_name"
+                android:padding="9dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_cart"
+                app:tint="#111827"
+                tools:ignore="UnusedAttribute" />
+
             <TextView
                 android:id="@+id/btnFilter"
                 android:layout_width="wrap_content"

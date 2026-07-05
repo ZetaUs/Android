@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_white"
+    android:layout_marginBottom="10dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <CheckBox
+        android:id="@+id/cbCartItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="#F97316"
+        android:padding="6dp" />
+
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="6dp"
+        android:background="@drawable/bg_rounded_rect"
+        android:backgroundTint="#F8FAFC"
+        android:clipToOutline="true"
+        tools:ignore="UnusedAttribute">
+
+        <ImageView
+            android:id="@+id/ivCartItemImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvCartItemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="#111827"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="金色旗舰礼盒套装 赠限定周边" />
+
+        <TextView
+            android:id="@+id/tvCartItemTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_badge_yellow"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:textColor="#92400E"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:text="新品" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCartItemPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#F97316"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck"
+                tools:text="¥299" />
+
+            <ImageView
+                android:id="@+id/btnCartItemDelete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/app_name"
+                android:padding="6dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_delete" />
+
+            <ImageView
+                android:id="@+id/btnCartItemMinus"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/bg_qty_btn"
+                android:contentDescription="@string/app_name"
+                android:padding="6dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_minus" />
+
+            <TextView
+                android:id="@+id/tvCartItemQty"
+                android:layout_width="36dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#111827"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/btnCartItemPlus"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_qty_btn"
+                android:contentDescription="@string/app_name"
+                android:padding="6dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_plus" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
